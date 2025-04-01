@@ -41,8 +41,8 @@ function updatePreview() {
   document.getElementById("previewSubtotal").textContent = subtotal.toFixed(2);
   document.getElementById("previewIVA").textContent = iva.toFixed(2);
   document.getElementById("previewTotal").textContent = total.toFixed(2);
-  generateBtn.disabled = rows.length === 0;
 
+  validarFormulario();
   saveToLocalStorage();
 }
 
@@ -73,6 +73,30 @@ function loadFromLocalStorage() {
 
 loadFromLocalStorage();
 
+function validarNIFCIF(valor) {
+  const regex = /^([A-Z]\d{7}[A-Z0-9]|\d{8}[A-Z])$/i;
+  return regex.test(valor);
+}
+
+function marcarInput(input, valido) {
+  input.classList.toggle("invalid", !valido);
+}
+
+function validarFormulario() {
+  const nifEmisorInput = document.getElementById("nifEmisor");
+  const nifClienteInput = document.getElementById("nifCliente");
+
+  const esNifEmisorValido = validarNIFCIF(nifEmisorInput.value.trim());
+  const esNifClienteValido = nifClienteInput.value.trim() === "" || validarNIFCIF(nifClienteInput.value.trim());
+
+  marcarInput(nifEmisorInput, esNifEmisorValido);
+  marcarInput(nifClienteInput, esNifClienteValido);
+
+  const hayProductos = document.querySelectorAll(".item-row").length > 0;
+
+  generateBtn.disabled = !esNifEmisorValido || !hayProductos;
+}
+
 document.getElementById("invoiceForm").addEventListener("submit", async function (e) {
   e.preventDefault();
   const { jsPDF } = window.jspdf;
@@ -92,18 +116,21 @@ document.getElementById("invoiceForm").addEventListener("submit", async function
   const file = logoInput.files[0];
 
   const generatePDF = (logoData = null) => {
+    let yOffset = logoData ? 35 : 20;
+
     if (logoData) doc.addImage(logoData, "PNG", 20, 10, 50, 20);
 
     doc.setFontSize(18);
-    doc.text("Factura", 105, 15, null, null, "center");
+    doc.text("Factura", 105, yOffset, null, null, "center");
+    yOffset += 10;
     doc.setFontSize(11);
-    doc.text(`Fecha: ${fecha}`, 20, 30);
-    doc.text(`N.º Factura: ${numeroFactura}`, 150, 30);
+    doc.text(`Fecha: ${fecha}`, 20, yOffset); yOffset += 7;
+    doc.text(`N.º Factura: ${numeroFactura}`, 150, yOffset); yOffset += 10;
     doc.setFontSize(12);
-    doc.text(`Emisor: ${emisor}`, 20, 40);
-    doc.text(`NIF: ${nifEmisor}`, 20, 47);
-    doc.text(`Cliente: ${cliente}`, 20, 55);
-    doc.text(`NIF: ${nifCliente}`, 20, 62);
+    doc.text(`Emisor: ${emisor}`, 20, yOffset); yOffset += 7;
+    doc.text(`NIF: ${nifEmisor}`, 20, yOffset); yOffset += 8;
+    doc.text(`Cliente: ${cliente}`, 20, yOffset); yOffset += 7;
+    doc.text(`NIF: ${nifCliente}`, 20, yOffset);
 
     const items = [];
     let subtotal = 0;
@@ -120,7 +147,7 @@ document.getElementById("invoiceForm").addEventListener("submit", async function
     const totalFinal = +(subtotal + iva).toFixed(2);
 
     doc.autoTable({
-      startY: logoData ? 70 : 68,
+      startY: yOffset + 10,
       head: [['Descripción', 'Cantidad', 'Precio Unitario', 'Subtotal']],
       body: items,
       styles: { fontSize: 10 }
