@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura Express Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>🧾 Factura Express Pro</h1>
+        <p class="subtitle">Genera tus facturas al instante, en PDF, gratis y sin complicaciones.</p>
+        <form id="invoiceForm">
+            <div class="input-group">
+                <label for="cliente">👤 Nombre del Cliente</label>
+                <input type="text" id="cliente" placeholder="Ej. Juan Pérez" required>
+            </div>
+
+            <div class="input-group">
+                <label for="concepto">📝 Concepto</label>
+                <input type="text" id="concepto" placeholder="Ej. Diseño de logo" required>
+            </div>
+
+            <div class="input-group">
+                <label for="precio">💶 Precio (€)</label>
+                <input type="number" id="precio" step="0.01" placeholder="Ej. 150.00" required>
+            </div>
+
+            <button type="submit">📄 Generar PDF</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>¿Te gustó esta herramienta? <a href="https://www.paypal.me/tuusuario" target="_blank">Invítame un café ☕</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
