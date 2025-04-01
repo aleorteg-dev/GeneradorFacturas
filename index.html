@@ -1,37 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura Express Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Factura Express Pro</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>🧾 Factura Express Pro</h1>
-        <p class="subtitle">Genera tus facturas al instante, en PDF, gratis y sin complicaciones.</p>
-        <form id="invoiceForm">
-            <div class="input-group">
-                <label for="cliente">👤 Nombre del Cliente</label>
-                <input type="text" id="cliente" placeholder="Ej. Juan Pérez" required>
-            </div>
+  <div class="container">
+    <h1>🧾 Factura Express Pro</h1>
+    <p class="subtitle">Genera facturas profesionales en segundos.</p>
 
-            <div class="input-group">
-                <label for="concepto">📝 Concepto</label>
-                <input type="text" id="concepto" placeholder="Ej. Diseño de logo" required>
-            </div>
+    <form id="invoiceForm">
+      <h3>Datos del Emisor</h3>
+      <div class="input-group">
+        <label for="emisor">🏢 Empresa / Emisor</label>
+        <input type="text" id="emisor" required />
+      </div>
+      <div class="input-group">
+        <label for="nifEmisor">🔢 NIF/CIF</label>
+        <input type="text" id="nifEmisor" required />
+      </div>
 
-            <div class="input-group">
-                <label for="precio">💶 Precio (€)</label>
-                <input type="number" id="precio" step="0.01" placeholder="Ej. 150.00" required>
-            </div>
+      <h3>Datos del Cliente</h3>
+      <div class="input-group">
+        <label for="cliente">👤 Cliente</label>
+        <input type="text" id="cliente" required />
+      </div>
+      <div class="input-group">
+        <label for="nifCliente">🔢 NIF/CIF</label>
+        <input type="text" id="nifCliente" />
+      </div>
 
-            <button type="submit">📄 Generar PDF</button>
-        </form>
-    </div>
+      <div class="input-group">
+        <label for="logo">📎 Logo de la empresa (opcional)</label>
+        <input type="file" id="logo" accept="image/*" />
+      </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="script.js"></script>
+      <h3>Productos / Servicios</h3>
+      <div id="itemsContainer"></div>
+
+      <div class="totales-preview">
+        <p><strong>Subtotal:</strong> €<span id="previewSubtotal">0.00</span></p>
+        <p><strong>IVA (21%):</strong> €<span id="previewIVA">0.00</span></p>
+        <p><strong>Total:</strong> €<span id="previewTotal">0.00</span></p>
+      </div>
+
+      <div class="buttons-row">
+        <button type="button" id="addItem">➕ Añadir producto</button>
+        <button type="submit" id="generateBtn" disabled>📄 Generar PDF</button>
+      </div>      
+    </form>
+
+    <div id="notification" class="notification hidden">✅ ¡Factura generada correctamente!</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
